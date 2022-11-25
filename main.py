@@ -45,7 +45,17 @@ while is_running:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 player_x_change = 0
 
+    # Modify location
     player_x += player_x_change
+
+    # Keep inside the screen
+    if player_x <= 0:
+        player_x = 0
+    elif player_x >= 736:
+        player_x = 736
+
+    # Player call
     player(player_x, player_y)
 
+    # Update screen
     pygame.display.update()
