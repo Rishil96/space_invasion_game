@@ -10,14 +10,14 @@ screen = pygame.display.set_mode(size=(800, 600))
 
 # Title and Icon
 pygame.display.set_caption("Space Invasion")
-icon = pygame.image.load("ufo.png")
+icon = pygame.image.load("images/ufo.png")
 pygame.display.set_icon(icon)
 
 # Background image
-background = pygame.image.load("Background.jpg")
+background = pygame.image.load("images/Background.jpg")
 
 # Create player variables
-player_image = pygame.image.load("Rocket.png")
+player_image = pygame.image.load("images/Rocket.png")
 player_x = 368
 player_y = 500
 player_x_change = 0
@@ -29,7 +29,7 @@ def player(x, y):
 
 
 # Create enemy
-enemy_image = pygame.image.load("enemy.png")
+enemy_image = pygame.image.load("images/enemy.png")
 enemy_x = random.randint(0, 736)
 enemy_y = random.randint(50, 200)
 enemy_x_change = 1
