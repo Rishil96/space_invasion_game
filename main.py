@@ -5,7 +5,7 @@ import pygame
 pygame.init()
 
 # Display the screen
-pygame.display.set_mode(size=(800, 600))
+screen = pygame.display.set_mode(size=(800, 600))
 
 # Title and Icon
 pygame.display.set_caption("Space Invasion")
@@ -21,3 +21,5 @@ while is_running:
             pygame.display.quit()
             pygame.quit()
             is_running = False
+    screen.fill((205, 144, 228))
+    pygame.display.update()
