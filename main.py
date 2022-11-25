@@ -16,10 +16,11 @@ pygame.display.set_icon(icon)
 player_image = pygame.image.load("Rocket.png")
 player_x = 368
 player_y = 536
+player_x_change = 0
 
 
-def player():
-    screen.blit(player_image, (player_x, player_y))
+def player(x, y):
+    screen.blit(player_image, (x, y))
 
 
 # Game loop
@@ -30,11 +31,21 @@ while is_running:
     screen.fill((205, 144, 228))
 
     for event in pygame.event.get():
-        if event == pygame.QUIT:
-            pygame.display.quit()
-            pygame.quit()
+
+        if event.type == pygame.QUIT:
             is_running = False
 
-    player()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player_x_change = -0.3
+            if event.key == pygame.K_RIGHT:
+                player_x_change = 0.3
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                player_x_change = 0
+
+    player_x += player_x_change
+    player(player_x, player_y)
 
     pygame.display.update()
