@@ -1,5 +1,6 @@
 # Space Invasion Game
 import pygame
+import random
 
 # Initialize pygame
 pygame.init()
@@ -12,15 +13,28 @@ pygame.display.set_caption("Space Invasion")
 icon = pygame.image.load("ufo.png")
 pygame.display.set_icon(icon)
 
-# Create player
+# Create player variables
 player_image = pygame.image.load("Rocket.png")
 player_x = 368
 player_y = 536
 player_x_change = 0
 
 
+# Create player function
 def player(x, y):
     screen.blit(player_image, (x, y))
+
+
+# Create enemy
+enemy_image = pygame.image.load("enemy.png")
+enemy_x = random.randint(0, 736)
+enemy_y = random.randint(50, 200)
+enemy_x_change = 0
+
+
+# Create enemy function
+def enemy(x, y):
+    screen.blit(enemy_image, (x, y))
 
 
 # Game loop
@@ -56,6 +70,9 @@ while is_running:
 
     # Player call
     player(player_x, player_y)
+
+    # Enemy call
+    enemy(enemy_x, enemy_y)
 
     # Update screen
     pygame.display.update()
