@@ -13,6 +13,9 @@ pygame.display.set_caption("Space Invasion")
 icon = pygame.image.load("ufo.png")
 pygame.display.set_icon(icon)
 
+# Background image
+background = pygame.image.load("Background.jpg")
+
 # Create player variables
 player_image = pygame.image.load("Rocket.png")
 player_x = 368
@@ -29,7 +32,7 @@ def player(x, y):
 enemy_image = pygame.image.load("enemy.png")
 enemy_x = random.randint(0, 736)
 enemy_y = random.randint(50, 200)
-enemy_x_change = 0.3
+enemy_x_change = 1
 enemy_y_change = 50
 
 
@@ -43,7 +46,8 @@ is_running = True
 
 while is_running:
     # RGB Background
-    screen.fill((205, 144, 228))
+    # screen.fill((205, 144, 228))
+    screen.blit(background, (0, 0))
 
     for event in pygame.event.get():
 
@@ -52,9 +56,9 @@ while is_running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                player_x_change = -0.3
+                player_x_change = -1
             if event.key == pygame.K_RIGHT:
-                player_x_change = 0.3
+                player_x_change = 1
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -74,10 +78,10 @@ while is_running:
 
     # Keep player inside the screen
     if enemy_x <= 0:
-        enemy_x_change = 0.3
+        enemy_x_change = 1
         enemy_y += enemy_y_change
     elif enemy_x >= 736:
-        enemy_x_change = -0.3
+        enemy_x_change = -1
         enemy_y += enemy_y_change
 
     # Player call
