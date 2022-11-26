@@ -1,6 +1,7 @@
 # Space Invasion Game
 import pygame
 import random
+import math
 
 # Initialize pygame
 pygame.init()
@@ -15,6 +16,9 @@ pygame.display.set_icon(icon)
 
 # Background image
 background = pygame.image.load("images/Background.jpg")
+
+# Score
+score = 0
 
 # Create player variables
 player_image = pygame.image.load("images/Rocket.png")
@@ -32,7 +36,7 @@ def player(x, y):
 enemy_image = pygame.image.load("images/enemy.png")
 enemy_x = random.randint(0, 736)
 enemy_y = random.randint(50, 200)
-enemy_x_change = 1
+enemy_x_change = 0.5
 enemy_y_change = 50
 
 
@@ -46,7 +50,7 @@ bullet_image = pygame.image.load("images/bullet.png")
 bullet_x = 0
 bullet_y = 500
 bullet_x_change = 0
-bullet_y_change = 1
+bullet_y_change = 3
 is_bullet_visible = False
 
 
@@ -55,6 +59,12 @@ def shoot_bullet(x, y):
     global is_bullet_visible
     is_bullet_visible = True
     screen.blit(bullet_image, (x + 16, y + 10))
+
+
+# Detect collision
+def bullet_collision_with_enemy(x1, y1, x2, y2):
+    distance = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+    return distance < 27
 
 
 # Game loop
@@ -98,10 +108,10 @@ while is_running:
 
     # Keep player inside the screen
     if enemy_x <= 0:
-        enemy_x_change = 1
+        enemy_x_change = 0.5
         enemy_y += enemy_y_change
     elif enemy_x >= 736:
-        enemy_x_change = -1
+        enemy_x_change = -0.5
         enemy_y += enemy_y_change
 
     # Bullet movement
@@ -111,6 +121,15 @@ while is_running:
     if is_bullet_visible:
         shoot_bullet(bullet_x, bullet_y)
         bullet_y -= bullet_y_change
+
+    # Collision
+    collision = bullet_collision_with_enemy(enemy_x, enemy_y, bullet_x, bullet_y)
+    if collision:
+        bullet_y = 500
+        is_bullet_visible = False
+        score += 1
+        enemy_x = random.randint(0, 736)
+        enemy_y = random.randint(50, 200)
 
     # Player call
     player(player_x, player_y)
