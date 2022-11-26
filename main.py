@@ -192,4 +192,3 @@ while is_running:
 
     # Update screen
     pygame.display.update()
-
