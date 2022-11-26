@@ -2,6 +2,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # Initialize pygame
 pygame.init()
@@ -22,6 +23,16 @@ score = 0
 my_font = pygame.font.Font("freesansbold.ttf", 32)
 text_x = 10
 text_y = 10
+
+
+# End of game text
+end_font = pygame.font.Font("freesansbold.ttf", 40)
+
+
+# Final text score
+def final_text():
+    my_final_font = end_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(my_final_font, (250, 200))
 
 
 # show score
@@ -85,6 +96,11 @@ def bullet_collision_with_enemy(x1, y1, x2, y2):
     return distance < 27
 
 
+# add music
+mixer.music.load("sounds/background_music.mp3")
+mixer.music.set_volume(0.3)
+mixer.music.play(-1)
+
 # Game loop
 is_running = True
 
@@ -99,11 +115,18 @@ while is_running:
             is_running = False
 
         if event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_LEFT:
                 player_x_change = -1
+
             if event.key == pygame.K_RIGHT:
                 player_x_change = 1
+
             if event.key == pygame.K_SPACE:
+
+                bullet_sound = mixer.Sound("sounds/shot.mp3")
+                bullet_sound.play()
+
                 if not is_bullet_visible:
                     bullet_x = player_x
                     shoot_bullet(bullet_x, bullet_y)
@@ -123,6 +146,12 @@ while is_running:
 
     # Modify enemy location
     for each_enemy in range(number_of_enemies):
+        # end of game
+        if enemy_y[each_enemy] > 500:
+            for k in range(number_of_enemies):
+                enemy_y[k] = 1000
+            final_text()
+            break
         enemy_x[each_enemy] += enemy_x_change[each_enemy]
 
         # Keep player inside the screen
@@ -136,6 +165,8 @@ while is_running:
         # Collision
         collision = bullet_collision_with_enemy(enemy_x[each_enemy], enemy_y[each_enemy], bullet_x, bullet_y)
         if collision:
+            collision_sound = mixer.Sound("sounds/punch.mp3")
+            collision_sound.play()
             bullet_y = 500
             is_bullet_visible = False
             score += 1
