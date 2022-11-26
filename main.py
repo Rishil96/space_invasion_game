@@ -19,6 +19,16 @@ background = pygame.image.load("images/Background.jpg")
 
 # Score
 score = 0
+my_font = pygame.font.Font("freesansbold.ttf", 32)
+text_x = 10
+text_y = 10
+
+
+# show score
+def show_score(x, y):
+    text = my_font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(text, (x, y))
+
 
 # Create player variables
 player_image = pygame.image.load("images/Rocket.png")
@@ -146,5 +156,9 @@ while is_running:
     # Player call
     player(player_x, player_y)
 
+    # Display score
+    show_score(text_x, text_y)
+
     # Update screen
     pygame.display.update()
+
