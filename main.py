@@ -33,16 +33,24 @@ def player(x, y):
 
 
 # Create enemy
-enemy_image = pygame.image.load("images/enemy.png")
-enemy_x = random.randint(0, 736)
-enemy_y = random.randint(50, 200)
-enemy_x_change = 0.5
-enemy_y_change = 50
+enemy_image = []
+enemy_x = []
+enemy_y = []
+enemy_x_change = []
+enemy_y_change = []
+number_of_enemies = 7
+
+for each_enemy in range(number_of_enemies):
+    enemy_image.append(pygame.image.load("images/enemy.png"))
+    enemy_x.append(random.randint(0, 736))
+    enemy_y.append(random.randint(50, 200))
+    enemy_x_change.append(0.5)
+    enemy_y_change.append(50)
 
 
 # Create enemy function
-def enemy(x, y):
-    screen.blit(enemy_image, (x, y))
+def enemy(x, y, en):
+    screen.blit(enemy_image[en], (x, y))
 
 
 # Create bullet
@@ -103,16 +111,29 @@ while is_running:
     elif player_x >= 736:
         player_x = 736
 
-    # Modify player location
-    enemy_x += enemy_x_change
+    # Modify enemy location
+    for each_enemy in range(number_of_enemies):
+        enemy_x[each_enemy] += enemy_x_change[each_enemy]
 
-    # Keep player inside the screen
-    if enemy_x <= 0:
-        enemy_x_change = 0.5
-        enemy_y += enemy_y_change
-    elif enemy_x >= 736:
-        enemy_x_change = -0.5
-        enemy_y += enemy_y_change
+        # Keep player inside the screen
+        if enemy_x[each_enemy] <= 0:
+            enemy_x_change[each_enemy] = 0.5
+            enemy_y[each_enemy] += enemy_y_change[each_enemy]
+        elif enemy_x[each_enemy] >= 736:
+            enemy_x_change[each_enemy] = -0.5
+            enemy_y[each_enemy] += enemy_y_change[each_enemy]
+
+        # Collision
+        collision = bullet_collision_with_enemy(enemy_x[each_enemy], enemy_y[each_enemy], bullet_x, bullet_y)
+        if collision:
+            bullet_y = 500
+            is_bullet_visible = False
+            score += 1
+            enemy_x[each_enemy] = random.randint(0, 736)
+            enemy_y[each_enemy] = random.randint(50, 200)
+
+        # Enemy call
+        enemy(enemy_x[each_enemy], enemy_y[each_enemy], each_enemy)
 
     # Bullet movement
     if bullet_y <= -64:
@@ -122,20 +143,8 @@ while is_running:
         shoot_bullet(bullet_x, bullet_y)
         bullet_y -= bullet_y_change
 
-    # Collision
-    collision = bullet_collision_with_enemy(enemy_x, enemy_y, bullet_x, bullet_y)
-    if collision:
-        bullet_y = 500
-        is_bullet_visible = False
-        score += 1
-        enemy_x = random.randint(0, 736)
-        enemy_y = random.randint(50, 200)
-
     # Player call
     player(player_x, player_y)
-
-    # Enemy call
-    enemy(enemy_x, enemy_y)
 
     # Update screen
     pygame.display.update()
