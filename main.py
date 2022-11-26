@@ -41,6 +41,22 @@ def enemy(x, y):
     screen.blit(enemy_image, (x, y))
 
 
+# Create bullet
+bullet_image = pygame.image.load("images/bullet.png")
+bullet_x = 0
+bullet_y = 500
+bullet_x_change = 0
+bullet_y_change = 1
+is_bullet_visible = False
+
+
+# shoot bullet
+def shoot_bullet(x, y):
+    global is_bullet_visible
+    is_bullet_visible = True
+    screen.blit(bullet_image, (x + 16, y + 10))
+
+
 # Game loop
 is_running = True
 
@@ -59,6 +75,10 @@ while is_running:
                 player_x_change = -1
             if event.key == pygame.K_RIGHT:
                 player_x_change = 1
+            if event.key == pygame.K_SPACE:
+                if not is_bullet_visible:
+                    bullet_x = player_x
+                    shoot_bullet(bullet_x, bullet_y)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -83,6 +103,14 @@ while is_running:
     elif enemy_x >= 736:
         enemy_x_change = -1
         enemy_y += enemy_y_change
+
+    # Bullet movement
+    if bullet_y <= -64:
+        bullet_y = 500
+        is_bullet_visible = False
+    if is_bullet_visible:
+        shoot_bullet(bullet_x, bullet_y)
+        bullet_y -= bullet_y_change
 
     # Player call
     player(player_x, player_y)
